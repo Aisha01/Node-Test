@@ -1,84 +1,326 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Sample</title>
-  </head>
-  <body>
- 
-    <p>Demonstration of  1:1 calling.</p>
-    <form id="credentials">
-      <fieldset>
-        <legend>Credentials</legend>
-        <input
-          id="access-token"
-          name="accessToken"
-          placeholder="Your access token"
-          type="text">
-        <input id="connect" title="connect" type="submit" value="connect">
-        <p id="connection-status">disconnected</p>
-      </fieldset>
-    </form>
-	<p>Demonstration of Sending Msssage.</p>
-	
-	<form id="msg">
-      <fieldset>
-        <legend>Message </legend>
-        <input
-          id="msgSent"
-          name="msgSent"
-          placeholder="Message sent to room"
-          type="text">
-          <input title="Sent" type="submit" value="Send Message in Room">
-		    <p id="Message-status"></p>
-      </fieldset>
-    </form>
-	
-		<p>Demonstration of Making a Call.</p>
-	
-	<form id="call">
-      <fieldset>
-        <legend>Place a Call </legend>
-        <input
-          id="msgSent"
-          name="msgSent"
-          placeholder="Place a call to "
-          type="text">
-          <input title="Sent" type="submit" value="Call Now">
-		  <button id="hang" title="hangup" type="button">cancel/hangup</button>
-		    
-      </fieldset>
-    </form>
-	
-	 <form id="dialer">
-      <fieldset>
-        <legend>Dialer</legend>
-        <input
-          id="invitee"
-          name="invitee"
-          placeholder="Person ID or Email Address or SIP URI or Room ID"
-          type="text">
-          <input title="dial" type="submit" value="dial">
-      </fieldset>
-    </form>
+<head>
 
-    <form id="call-controls">
-      <fieldset>
-        <legend>Call Controls</legend>
-        <button id="hangup" title="hangup" type="button">cancel/hangup</button>
-      </fieldset>
-    </form>
+    <meta charset="utf-8" />
+    <title>CiscoSpark App</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
-    <div style="display: flex">
-      <video style="width:50%" id="self-view" muted autoplay></video>
-      <div style="width:50%">
-        <audio id="remote-view-audio" autoplay></audio>
-        <video id="remote-view-video" autoplay></video>
-      </div>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        var currentLocation = window.location.href;
+
+        var type = window.location.hash.substr(1);
+
+        var accessToken = null;
+        var pathArray = type.split('&');
+        for (i = 0; i < pathArray.length; i++) {
+            var currentItem = pathArray[i];
+            if (i == 2) {
+                var splitByEqual = currentItem.split('=');
+
+                accessToken = splitByEqual[1];
+            }
+        }
+        var auth = 'Bearer ' + accessToken;
+        $(document).ready(function () {
+            console.log("Access Token is " + accessToken);
+            $('#getRooms').on('click', function () {
+                $('div.rooms > div.chat').empty();
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://api.ciscospark.com/v1/memberships',
+                    headers: {
+                        'Access-Control-Allow-Origin': 'https://availiable.azurewebsites.net',
+                        'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE',
+                        'contentType': 'application/json; charset=utf-8',
+                        'Authorization': auth
+                    },
+                    success: function (r) {
+                        var s = JSON.stringify(r);
+                        var c = JSON.parse(s);
+
+                        for (var i = 0; i < c.items.length; i++) {
+                            var objPerson = c.items[i];
+                            var roomId = objPerson.roomId;
+                            console.log(objPerson.personDisplayName);
+                            var title = null;
+                            var roomURL = 'https://api.ciscospark.com/v1/rooms/' + roomId;
+                            console.log(roomURL);
+                            $.ajax({
+                                type: 'GET',
+                                url: roomURL,
+                                headers: {
+                                    'Access-Control-Allow-Origin': 'https://availiable.azurewebsites.net',
+                                    'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE',
+                                    'contentType': 'application/json; charset=utf-8',
+                                    'Authorization': auth
+                                },
+                                success: function (data) {
+                                    console.log("I am called inside roomUrl");
+                                    var stringify = JSON.stringify(data);
+                                    var jsonObj = JSON.parse(stringify);
+                                    console.log(jsonObj.title);
+                                    title = jsonObj.title;
+                                    console.log("Title is " + title);
+                                    $('div.rooms > div.chat').append('<li id="' + jsonObj.id + '" class="btnMsg"><span>' + title + '</span></li>');
+                                    //   $('div.rooms > div.chat').append('<span class="title">' + title + ' </span>');
+
+
+
+
+                                },
+                                error: function (data) {
+                                }
+
+                            })
+
+
+                            console.log("for loop for getting rooms" + i);
+
+
+
+                        }
+
+
+
+                    },
+                    error: function (r) {
+                        alert('error' + r);
+                    }
+                });
+            });
+
+            var RoomID = null;
+
+            $('.chat').on('click', 'li ', function () {
+
+
+
+                var obj = this;
+                var objId = this.id;
+                console.log("Room ID is" + objId);
+                RoomID = objId;
+                $('.messageChat').empty();
+
+                var fruits = [];
+                var msgUrl = 'https://api.ciscospark.com/v1/messages?roomId=' + objId;
+                $.ajax({
+                    type: 'GET',
+                    url: msgUrl,
+                    headers: {
+                        'Access-Control-Allow-Origin': 'https://availiable.azurewebsites.net',
+                        'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE',
+                        'contentType': 'application/json; charset=utf-8',
+                        'Authorization': auth
+                    },
+                    success: function (data) {
+                        console.log("Messages receievd for this chat is " + data);
+
+
+                        var received = JSON.stringify(data);
+                        var receivedobj = JSON.parse(received);
+
+                        for (var i = 0; i < receivedobj.items.length; i++) {
+
+
+
+                            var objMessage = receivedobj.items[i];
+                            var txt = objMessage.text;
+
+
+
+                            fruits.push(txt);
+                            console.log(txt);
+
+
+
+                        }
+                        fruits.reverse();
+
+
+                        var img = "https://d30y9cdsu7xlg0.cloudfront.net/png/5982-200.png";
+
+                        $.each(fruits, function (index, value) {
+                            console.log(value);
+
+                            $('div.messageChat').append(' <img src=' + img + ' class="chatIcon"/><span class="chatMsg">' + value + ' </span><br>');
+
+                        });
+
+                    },
+                    error: function (data) {
+                        alert(error);
+                    }
+                })
+
+
+
+
+            });
+
+            $('#btnMsg').on('click', function () {
+
+                alert('send the message to roomID' + RoomID);
+
+
+            });
+        })
+    </script>
+
+
+
+<style type="text/css">
+    .chat {
+        width: 200px;
+        margin-top: 14px;
+        margin-left: 16px;
+        margin-bottom: 30px;
+    }
+
+    .btnMsg {
+        list-style-type: none;
+        margin: 10px 5px;
+    }
+
+    .heading {
+        margin-left: 40%;
+        margin-top: 13px;
+        width: 200px;
+        font-size: 20px;
+        font-family: verdana;
+        padding: 15px;
+        background-color: antiquewhite;
+        box-shadow: 10px 10px 5px grey;
+    }
+
+    .marginLeft15 {
+        margin-left: 5%;
+        margin-top: 3%;
+    }
+
+    .messageChat {
+        border: 1px solid black;
+        width: 50%;
+        position: absolute;
+        left: 24%;
+        top: 24%;
+        overflow: auto;
+        height: 300px !important;
+        box-shadow: 5px 5px 5px grey;
+    }
+
+    .chatIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .chatMsg {
+        padding-left: 12px;
+        padding-bottom: 12px;
+    }
+
+    .msgSent {
+        position: absolute;
+        left: 24%;
+        top: 76%;
+    }
+
+    .Left15 {
+        margin-left: 15px;
+    }
+
+    .width250 {
+        width: 250px;
+    }
+
+    span {
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+
+    <div class="heading"> Cisco Spark App</div>
+    <div class="marginLeft15">
+        <input type="button" id="getRooms" value="Get Rooms" class="btn-default" />
+        <div class="rooms">
+            <div class="chat">
+            </div>
+        </div>
+        <div class="messageChat">
+
+        </div>
+
+
+
+    </div>
+    <div class="msgSent">
+        <input type="text" id="myText" class="width250"
+               title="Message" />
+        <input type="button" title="Send Message" value="Send Message" class="Left15" id="btnMsg" />
+
     </div>
 
+
+    <p>Demonstration of  1:1 calling.</p>
+    <form id="credentials">
+        <fieldset>
+            <legend>Credentials</legend>
+            <input id="access-token"
+                   name="accessToken"
+                   placeholder="Your access token"
+                   type="text">
+            <input id="connect" title="connect" type="submit" value="connect">
+            <p id="connection-status">disconnected</p>
+        </fieldset>
+    </form>
+    <p>Demonstration of Sending Msssage.</p>
+
+    <form id="msg">
+        <fieldset>
+            <legend>Message </legend>
+            <input id="msgSent"
+                   name="msgSent"
+                   placeholder="Message sent to room"
+                   type="text">
+            <input title="Sent" type="submit" value="Send Message in Room">
+            <p id="Message-status"></p>
+        </fieldset>
+    </form>
+
+    <p>Demonstration of Making a Call.</p>
+
+    <form id="call">
+        <fieldset>
+            <legend>Place a Call </legend>
+            <input id="msgSent"
+                   name="msgSent"
+                   placeholder="Place a call to "
+                   type="text">
+            <input title="Sent" type="submit" value="Call Now">
+            <button id="hang" title="hangup" type="button">cancel/hangup</button>
+
+        </fieldset>
+    </form>
+
+    <form id="dialer">
+        <fieldset>
+            <legend>Dialer</legend>
+            <input id="invitee"
+                   name="invitee"
+                   placeholder="Person ID or Email Address or SIP URI or Room ID"
+                   type="text">
+            <input title="dial" type="submit" value="dial">
+        </fieldset>
+    </form>
+   
     <!-- /bundle.js is the bundled CiscoSpark JavaScript SDK -->
     <script src="bundle.js"></script>
     <!-- app.js is your application code -->
     <script src="app.js"></script>
-  </body>
+</body>
 </html>
