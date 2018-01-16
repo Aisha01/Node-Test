@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sample</title>
+  </head>
+  <body>
+ 
+    <p>Demonstration of  1:1 calling.</p>
+    <form id="credentials">
+      <fieldset>
+        <legend>Credentials</legend>
+        <input
+          id="access-token"
+          name="accessToken"
+          placeholder="Your access token"
+          type="text">
+        <input id="connect" title="connect" type="submit" value="connect">
+        <p id="connection-status">disconnected</p>
+      </fieldset>
+    </form>
+	<p>Demonstration of Sending Msssage.</p>
+	
+	<form id="msg">
+      <fieldset>
+        <legend>Message </legend>
+        <input
+          id="msgSent"
+          name="msgSent"
+          placeholder="Message sent to room"
+          type="text">
+          <input title="Sent" type="submit" value="Send Message in Room">
+		    <p id="Message-status"></p>
+      </fieldset>
+    </form>
+	
+		<p>Demonstration of Making a Call.</p>
+	
+	<form id="call">
+      <fieldset>
+        <legend>Place a Call </legend>
+        <input
+          id="msgSent"
+          name="msgSent"
+          placeholder="Place a call to "
+          type="text">
+          <input title="Sent" type="submit" value="Call Now">
+		  <button id="hang" title="hangup" type="button">cancel/hangup</button>
+		    
+      </fieldset>
+    </form>
+	
+	 <form id="dialer">
+      <fieldset>
+        <legend>Dialer</legend>
+        <input
+          id="invitee"
+          name="invitee"
+          placeholder="Person ID or Email Address or SIP URI or Room ID"
+          type="text">
+          <input title="dial" type="submit" value="dial">
+      </fieldset>
+    </form>
+
+    <form id="call-controls">
+      <fieldset>
+        <legend>Call Controls</legend>
+        <button id="hangup" title="hangup" type="button">cancel/hangup</button>
+      </fieldset>
+    </form>
+
+    <div style="display: flex">
+      <video style="width:50%" id="self-view" muted autoplay></video>
+      <div style="width:50%">
+        <audio id="remote-view-audio" autoplay></audio>
+        <video id="remote-view-video" autoplay></video>
+      </div>
+    </div>
+
+    <!-- /bundle.js is the bundled CiscoSpark JavaScript SDK -->
+    <script src="bundle.js"></script>
+    <!-- app.js is your application code -->
+    <script src="app.js"></script>
+  </body>
+</html>

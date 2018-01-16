@@ -1,0 +1,16 @@
+{
+  "name": "oauthsample",
+  "version": "1.0.0",
+  "description": "configuring the user authentication from ciscospark",
+  "main": "index.js",
+  "dependencies": {
+    "browserify": "^14.5.0",
+    "ciscospark": "^1.23.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

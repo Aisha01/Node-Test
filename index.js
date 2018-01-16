@@ -1,0 +1,1 @@
+"window.CiscoSpark = require('ciscospark')" 
