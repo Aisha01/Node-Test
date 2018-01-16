@@ -4,6 +4,158 @@
 
     <meta charset="utf-8" />
     <title>CiscoSpark App</title>
+    
+
+<style type="text/css">
+    .chat {
+        width: 200px;
+        margin-top: 14px;
+        margin-left: 16px;
+        margin-bottom: 30px;
+    }
+
+    .btnMsg {
+        list-style-type: none;
+        margin: 10px 5px;
+    }
+
+    .heading {
+        margin-left: 40%;
+        margin-top: 13px;
+        width: 200px;
+        font-size: 20px;
+        font-family: verdana;
+        padding: 15px;
+        background-color: antiquewhite;
+        box-shadow: 10px 10px 5px grey;
+    }
+
+    .marginLeft15 {
+        margin-left: 5%;
+        margin-top: 3%;
+    }
+
+    .messageChat {
+        border: 1px solid black;
+        width: 50%;
+        position: absolute;
+        left: 24%;
+        top: 24%;
+        overflow: auto;
+        height: 300px !important;
+        box-shadow: 5px 5px 5px grey;
+    }
+
+    .chatIcon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .chatMsg {
+        padding-left: 12px;
+        padding-bottom: 12px;
+    }
+
+    .msgSent {
+        position: absolute;
+        left: 24%;
+        top: 76%;
+    }
+
+    .Left15 {
+        margin-left: 15px;
+    }
+
+    .width250 {
+        width: 250px;
+    }
+
+    span {
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+
+    <div class="heading"> Cisco Spark App</div>
+    <div class="marginLeft15">
+        <input type="button" id="getRooms" value="Get Rooms" class="btn-default" />
+        <div class="rooms">
+            <div class="chat">
+            </div>
+        </div>
+        <div class="messageChat">
+
+        </div>
+
+
+
+    </div>
+    <div class="msgSent">
+        <input type="text" id="myText" class="width250"
+               title="Message" />
+        <input type="button" title="Send Message" value="Send Message" class="Left15" id="btnMsg" />
+
+    </div>
+
+
+    <p>Demonstration of  1:1 calling.</p>
+    <form id="credentials">
+        <fieldset>
+            <legend>Credentials</legend>
+            <input id="access-token"
+                   name="accessToken"
+                   placeholder="Your access token"
+                   type="text">
+            <input id="connect" title="connect" type="submit" value="connect">
+            <p id="connection-status">disconnected</p>
+        </fieldset>
+    </form>
+    <p>Demonstration of Sending Msssage.</p>
+
+    <form id="msg">
+        <fieldset>
+            <legend>Message </legend>
+            <input id="msgSent"
+                   name="msgSent"
+                   placeholder="Message sent to room"
+                   type="text">
+            <input title="Sent" type="submit" value="Send Message in Room">
+            <p id="Message-status"></p>
+        </fieldset>
+    </form>
+
+    <p>Demonstration of Making a Call.</p>
+
+    <form id="call">
+        <fieldset>
+            <legend>Place a Call </legend>
+            <input id="msgSent"
+                   name="msgSent"
+                   placeholder="Place a call to "
+                   type="text">
+            <input title="Sent" type="submit" value="Call Now">
+            <button id="hang" title="hangup" type="button">cancel/hangup</button>
+
+        </fieldset>
+    </form>
+
+    <form id="dialer">
+        <fieldset>
+            <legend>Dialer</legend>
+            <input id="invitee"
+                   name="invitee"
+                   placeholder="Person ID or Email Address or SIP URI or Room ID"
+                   type="text">
+            <input title="dial" type="submit" value="dial">
+        </fieldset>
+    </form>
+   
+    <!-- /bundle.js is the bundled CiscoSpark JavaScript SDK -->
+    <script src="bundle.js"></script>
+    <!-- app.js is your application code -->
+    <script src="app.js"></script>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 
@@ -171,156 +323,5 @@
     </script>
 
 
-
-<style type="text/css">
-    .chat {
-        width: 200px;
-        margin-top: 14px;
-        margin-left: 16px;
-        margin-bottom: 30px;
-    }
-
-    .btnMsg {
-        list-style-type: none;
-        margin: 10px 5px;
-    }
-
-    .heading {
-        margin-left: 40%;
-        margin-top: 13px;
-        width: 200px;
-        font-size: 20px;
-        font-family: verdana;
-        padding: 15px;
-        background-color: antiquewhite;
-        box-shadow: 10px 10px 5px grey;
-    }
-
-    .marginLeft15 {
-        margin-left: 5%;
-        margin-top: 3%;
-    }
-
-    .messageChat {
-        border: 1px solid black;
-        width: 50%;
-        position: absolute;
-        left: 24%;
-        top: 24%;
-        overflow: auto;
-        height: 300px !important;
-        box-shadow: 5px 5px 5px grey;
-    }
-
-    .chatIcon {
-        width: 20px;
-        height: 20px;
-    }
-
-    .chatMsg {
-        padding-left: 12px;
-        padding-bottom: 12px;
-    }
-
-    .msgSent {
-        position: absolute;
-        left: 24%;
-        top: 76%;
-    }
-
-    .Left15 {
-        margin-left: 15px;
-    }
-
-    .width250 {
-        width: 250px;
-    }
-
-    span {
-        cursor: pointer;
-    }
-</style>
-</head>
-<body>
-
-
-    <div class="heading"> Cisco Spark App</div>
-    <div class="marginLeft15">
-        <input type="button" id="getRooms" value="Get Rooms" class="btn-default" />
-        <div class="rooms">
-            <div class="chat">
-            </div>
-        </div>
-        <div class="messageChat">
-
-        </div>
-
-
-
-    </div>
-    <div class="msgSent">
-        <input type="text" id="myText" class="width250"
-               title="Message" />
-        <input type="button" title="Send Message" value="Send Message" class="Left15" id="btnMsg" />
-
-    </div>
-
-
-    <p>Demonstration of  1:1 calling.</p>
-    <form id="credentials">
-        <fieldset>
-            <legend>Credentials</legend>
-            <input id="access-token"
-                   name="accessToken"
-                   placeholder="Your access token"
-                   type="text">
-            <input id="connect" title="connect" type="submit" value="connect">
-            <p id="connection-status">disconnected</p>
-        </fieldset>
-    </form>
-    <p>Demonstration of Sending Msssage.</p>
-
-    <form id="msg">
-        <fieldset>
-            <legend>Message </legend>
-            <input id="msgSent"
-                   name="msgSent"
-                   placeholder="Message sent to room"
-                   type="text">
-            <input title="Sent" type="submit" value="Send Message in Room">
-            <p id="Message-status"></p>
-        </fieldset>
-    </form>
-
-    <p>Demonstration of Making a Call.</p>
-
-    <form id="call">
-        <fieldset>
-            <legend>Place a Call </legend>
-            <input id="msgSent"
-                   name="msgSent"
-                   placeholder="Place a call to "
-                   type="text">
-            <input title="Sent" type="submit" value="Call Now">
-            <button id="hang" title="hangup" type="button">cancel/hangup</button>
-
-        </fieldset>
-    </form>
-
-    <form id="dialer">
-        <fieldset>
-            <legend>Dialer</legend>
-            <input id="invitee"
-                   name="invitee"
-                   placeholder="Person ID or Email Address or SIP URI or Room ID"
-                   type="text">
-            <input title="dial" type="submit" value="dial">
-        </fieldset>
-    </form>
-   
-    <!-- /bundle.js is the bundled CiscoSpark JavaScript SDK -->
-    <script src="bundle.js"></script>
-    <!-- app.js is your application code -->
-    <script src="app.js"></script>
 </body>
 </html>
